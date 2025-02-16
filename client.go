@@ -9,7 +9,9 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"errors"
+	"fmt"
 	"io"
+	"math/rand"
 	"net"
 	"net/http"
 	"net/http/cookiejar"
@@ -27,6 +29,60 @@ import (
 	"restys/internal/header"
 	"restys/internal/util"
 )
+
+type WebGL struct {
+	Render    string `json:"render"`
+	Vendor    string `json:"vender"`
+	ToDataURL int    `json:"todataurl"`
+}
+type Fingerprint struct {
+	ClientHint struct {
+		Architecture string `json:"architecture"`
+		Bitness      string `json:"bitness"`
+		Brands       []struct {
+			Brand   string `json:"brand"`
+			Version string `json:"version"`
+		} `json:"brands"`
+		FullVersionList []struct {
+			Brand   string `json:"brand"`
+			Version string `json:"version"`
+		} `json:"fullVersionList"`
+		Mobile          bool   `json:"mobile"`
+		Platform        string `json:"platform"`
+		PlatformVersion string `json:"platformVersion"`
+		UaFullVersion   string `json:"uaFullVersion"`
+	} `json:"clientHint"`
+	WebGL     WebGL  `json:"webgl"`
+	UserAgent string `json:"navigator.userAgent"`
+	Platform  string `json:"navigator.platform"`
+	Vendor    string `json:"navigator.vendor"`
+	WebRtc    struct {
+		Public  string `json:"public"`
+		Private string `json:"private"`
+	} `json:"webrtc"`
+}
+
+// GenerateSecCHUA 生成 sec-ch-ua 字段
+func (ch *Fingerprint) GenerateSecCHUA() string {
+	var uaBrands []string
+	for _, brand := range ch.ClientHint.Brands {
+		uaBrands = append(uaBrands, fmt.Sprintf(`"%s";v="%s"`, brand.Brand, brand.Version))
+	}
+	return strings.Join(uaBrands, ", ")
+}
+
+// GenerateSecCHUAMobile 生成 sec-ch-ua-mobile 字段
+func (ch *Fingerprint) GenerateSecCHUAMobile() string {
+	if ch.ClientHint.Mobile {
+		return "?1"
+	}
+	return "?0"
+}
+
+// GenerateSecCHUAPlatform 生成 sec-ch-ua-platform 字段
+func (ch *Fingerprint) GenerateSecCHUAPlatform() string {
+	return fmt.Sprintf(`"%s"`, ch.ClientHint.Platform)
+}
 
 // DefaultClient returns the global default Client.
 func DefaultClient() *Client {
@@ -1009,6 +1065,235 @@ func (c *Client) SetHTTP2SettingsFrame(settings ...http2.Setting) *Client {
 // value of initial WINDOW_UPDATE frame.
 func (c *Client) SetHTTP2ConnectionFlow(flow uint32) *Client {
 	c.Transport.SetHTTP2ConnectionFlow(flow)
+	return c
+}
+
+func (c *Client) GenerateRandomFingerprint(version string) *Fingerprint {
+	bigVersion := version
+	rand.Seed(time.Now().UnixNano())
+	fp := &Fingerprint{}
+	rand1 := rand.Intn(900) + 100
+	rand2 := rand.Intn(98) + 1
+	// ClientHint
+	fp.ClientHint.Architecture = "x86"
+	fp.ClientHint.Bitness = "64"
+	fp.ClientHint.Brands = []struct {
+		Brand   string `json:"brand"`
+		Version string `json:"version"`
+	}{
+		//{"Microsoft Edge", "119"},
+		{"Chromium", bigVersion},
+		{"Not=A?Brand", "24"},
+	}
+	fp.ClientHint.FullVersionList = []struct {
+		Brand   string `json:"brand"`
+		Version string `json:"version"`
+	}{
+		//{"Microsoft Edge", "119.0.2792.52"},
+		{"Chromium", fmt.Sprintf("%s.0.6%v.%v", bigVersion, rand1, rand2)},
+		{"Not=A?Brand", "24.0.0.0"},
+	}
+	fp.ClientHint.Mobile = false
+	fp.ClientHint.Platform = "Windows"
+	fp.ClientHint.PlatformVersion = "10.0.0"
+	fp.ClientHint.UaFullVersion = fmt.Sprintf("%s.0.6%v.%v", bigVersion, rand1, rand2)
+
+	// WebGL
+	fp.WebGL.Render = generateNvidiaGPUInfo()
+	fp.WebGL.Vendor = "Google Inc. (NVIDIA)"
+	fp.WebGL.ToDataURL = rand.Intn(200) + 54 // Random value between 100 and 254
+
+	// Navigator
+	fp.UserAgent = fmt.Sprintf("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/%s.0.0.0 Safari/537.36", bigVersion)
+	fp.Platform = "Win32"
+	fp.Vendor = "Google Inc."
+	switch rand.Intn(6) {
+	case 0:
+		attach360FingerPrint(fp, bigVersion, rand1, rand2)
+	case 1:
+		attach360JsFingerPrint(fp, bigVersion, rand1, rand2)
+	case 2:
+		attachQQFingerPrint(fp, bigVersion, rand1, rand2)
+	case 3:
+		attachOperaFingerPrint(fp, bigVersion, rand1, rand2)
+	case 4:
+		attachEdgeFingerPrint(fp, bigVersion, rand1, rand2)
+	case 5:
+
+	}
+	return fp
+}
+
+func generateNvidiaGPUInfo() string {
+	// NVIDIA GPU models and their corresponding PCI IDs
+	gpus := map[string]string{
+		"NVIDIA GeForce GTX 1650 SUPER":      "0x00002187",
+		"NVIDIA GeForce RTX 2060 SUPER":      "0x00001F06",
+		"NVIDIA GeForce RTX 3090":            "0x00002204",
+		"NVIDIA GeForce RTX 3060 Laptop GPU": "0x00002520",
+		"NVIDIA GeForce GTX 1660":            "0x00002184",
+		"NVIDIA GeForce GTX 1080 Ti":         "0x00001B06",
+		"NVIDIA GeForce RTX 4070 Ti":         "0x000026B2",
+		"NVIDIA GeForce GTX 1070":            "0x00001B81",
+		"NVIDIA GeForce RTX 3080":            "0x00002201",
+		"NVIDIA GeForce GTX 1660 Ti":         "0x000021C4",
+		"NVIDIA GeForce RTX 3070":            "0x00002207",
+		"NVIDIA GeForce RTX 3060":            "0x00002524",
+		"NVIDIA GeForce GTX 1080":            "0x00001B80",
+		"NVIDIA GeForce GTX 1050 Ti":         "0x00001C82",
+		"NVIDIA GeForce RTX 4080":            "0x000026B0",
+		"NVIDIA GeForce RTX 4050 Laptop GPU": "0x000027A1",
+		"NVIDIA GeForce GTX 1060":            "0x00001C02",
+		"NVIDIA GeForce RTX 3050":            "0x00002586",
+		"NVIDIA GeForce RTX 2080 SUPER":      "0x00001E81",
+		"NVIDIA GeForce GTX 1050":            "0x00001C81",
+		"NVIDIA GeForce RTX 4090":            "0x000026B1",
+		"NVIDIA GeForce RTX 2070 SUPER":      "0x00001E84",
+		"NVIDIA GeForce RTX 2080":            "0x00001E87",
+		"NVIDIA GeForce GTX 970M":            "0x000013D8",
+		"NVIDIA GeForce RTX 4060":            "0x000026B3",
+		"NVIDIA GeForce RTX 2060":            "0x00001F08",
+		"NVIDIA GeForce RTX 3070 Ti":         "0x00002208",
+		"NVIDIA GeForce RTX 4060 Ti":         "0x000026B4",
+		"NVIDIA GeForce GTX 1660 SUPER":      "0x000021C5",
+		"NVIDIA GeForce RTX 4080 Ti":         "0x000026B5",
+	}
+
+	// Slice to store the generated GPU information strings
+	var gpuInfo []string
+
+	// Generate GPU info strings
+	for model, pciID := range gpus {
+		info := fmt.Sprintf("ANGLE (NVIDIA, %s (%s) Direct3D11 vs_5_0 ps_5_0, D3D11)", model, pciID)
+		gpuInfo = append(gpuInfo, info)
+	}
+
+	// Seed the random number generator
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+
+	// Return a random GPU info string
+	return gpuInfo[r.Intn(len(gpuInfo))]
+}
+
+func attach360FingerPrint(fp *Fingerprint, bigVersion string, rand1, rand2 int) {
+	fp.ClientHint.Brands = []struct {
+		Brand   string `json:"brand"`
+		Version string `json:"version"`
+	}{
+		{"Chromium", bigVersion}, // 360浏览器的版本号与原生浏览器一致
+		{"Not=A?Brand", "24"},
+		{"Google Chrome", bigVersion},
+	}
+	fp.ClientHint.FullVersionList = []struct {
+		Brand   string `json:"brand"`
+		Version string `json:"version"`
+	}{
+		//{"Microsoft Edge", "119.0.2792.52"},
+		{"Chromium", fmt.Sprintf("%s.0.6%v.%v", bigVersion, rand1, rand2)},
+		{"Not=A?Brand", "24.0.0.0"},
+		{"Google Chrome", fmt.Sprintf("%s.0.6%v.%v", bigVersion, rand1, rand2)},
+	}
+
+	fp.UserAgent = fmt.Sprintf("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/%s.0.0.0 Safari/537.36 QIHU 360SE", bigVersion)
+}
+
+func attach360JsFingerPrint(fp *Fingerprint, bigVersion string, rand1, rand2 int) {
+	fp.ClientHint.Brands = []struct {
+		Brand   string `json:"brand"`
+		Version string `json:"version"`
+	}{
+		{"Chromium", bigVersion}, // 360浏览器的版本号与原生浏览器一致
+		{"Not(A:Brand", "24"},
+		{"Google Chrome", bigVersion},
+	}
+	fp.ClientHint.FullVersionList = []struct {
+		Brand   string `json:"brand"`
+		Version string `json:"version"`
+	}{
+		//{"Microsoft Edge", "119.0.2792.52"},
+		{"Chromium", fmt.Sprintf("%s.0.6%v.%v", bigVersion, rand1, rand2)},
+		{"Not(A:Brand", "24.0.0.0"},
+		{"Google Chrome", fmt.Sprintf("%s.0.6%v.%v", bigVersion, rand1, rand2)},
+	}
+	fp.UserAgent = fmt.Sprintf("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/%s.0.6%v.%v Safari/537.36 QIHU 360EE", bigVersion, rand1, rand2)
+}
+
+func attachQQFingerPrint(fp *Fingerprint, bigVersion string, rand1, rand2 int) {
+	fp.ClientHint.Brands = []struct {
+		Brand   string `json:"brand"`
+		Version string `json:"version"`
+	}{
+		{";Not A Brand", "99"},
+		{"Chromium", bigVersion},
+	}
+	fp.ClientHint.FullVersionList = []struct {
+		Brand   string `json:"brand"`
+		Version string `json:"version"`
+	}{
+		{"Chromium", fmt.Sprintf("%s.0.6%v.%v", bigVersion, rand1, rand2)},
+		{";Not A Brand", "99"},
+	}
+	fp.UserAgent = fmt.Sprintf("Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/%s.0.6%v.%v Safari/537.36 Core/1.94.201.400 QQBrowser/11.9.5%v.%v0", bigVersion, rand1, rand2, rand1, rand2)
+}
+
+func attachOperaFingerPrint(fp *Fingerprint, bigVersion string, rand1, rand2 int) {
+	fp.ClientHint.Brands = []struct {
+		Brand   string `json:"brand"`
+		Version string `json:"version"`
+	}{
+		{"Chromium", bigVersion},
+		{"Opera", bigVersion},
+		{"Not?A_Brand", "99"},
+	}
+	fp.ClientHint.FullVersionList = []struct {
+		Brand   string `json:"brand"`
+		Version string `json:"version"`
+	}{
+		{"Chromium", fmt.Sprintf("%s.0.6%v.%v", bigVersion, rand1, rand2)},
+		{"Opera", fmt.Sprintf("%s.0.6%v.%v", bigVersion, rand1, rand2)},
+		{"Not?A_Brand", "99.0.0.0"},
+	}
+	fp.UserAgent = fmt.Sprintf("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/%v.0.0.0 Safari/537.36 OPR/%v.0.0.0", bigVersion, bigVersion)
+}
+
+func attachEdgeFingerPrint(fp *Fingerprint, bigVersion string, rand1, rand2 int) {
+	fp.ClientHint.Brands = []struct {
+		Brand   string `json:"brand"`
+		Version string `json:"version"`
+	}{
+		{"Not A(Brand", "8"},
+		{"Chromium", bigVersion},
+		{"Microsoft Edge", bigVersion},
+	}
+	fp.ClientHint.FullVersionList = []struct {
+		Brand   string `json:"brand"`
+		Version string `json:"version"`
+	}{
+		{"Not A(Brand", "8.0.0.0"},
+		{"Chromium", fmt.Sprintf("%s.0.6%v.%v", bigVersion, rand1, rand2)},
+		{"Microsoft Edge", fmt.Sprintf("%s.0.6%v.%v", bigVersion, rand1, rand2)},
+	}
+	fp.UserAgent = fmt.Sprintf("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/%v.0.0.0 Safari/537.36 Edg/%v.0.0.0", bigVersion, bigVersion)
+}
+
+func (c *Client) SetFingerPrint(fingerprint *Fingerprint) *Client {
+
+	chromeHeaders = map[string]string{
+		"pragma":                    "no-cache",
+		"cache-control":             "no-cache",
+		"sec-ch-ua":                 fingerprint.GenerateSecCHUA(),
+		"sec-ch-ua-mobile":          fingerprint.GenerateSecCHUAMobile(),
+		"sec-ch-ua-platform":        fingerprint.GenerateSecCHUAPlatform(),
+		"upgrade-insecure-requests": "1",
+		"user-agent":                fingerprint.UserAgent,
+		"accept":                    "*/*",
+		"sec-fetch-site":            "none",
+		"sec-fetch-mode":            "cors",
+		"sec-fetch-user":            "?1",
+		"sec-fetch-dest":            "empty",
+		"accept-language":           "zh-CN,zh;q=0.9",
+	}
+	c.SetCommonHeaders(chromeHeaders)
 	return c
 }
 
