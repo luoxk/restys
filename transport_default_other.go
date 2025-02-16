@@ -4,7 +4,7 @@
 
 //go:build !js || !wasm
 
-package req
+package restys
 
 import (
 	"context"

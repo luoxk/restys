@@ -10,9 +10,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/imroc/req/v3/internal/transport"
 	"github.com/quic-go/quic-go"
 	"github.com/quic-go/quic-go/quicvarint"
+	"restys/internal/transport"
 
 	"github.com/quic-go/qpack"
 )

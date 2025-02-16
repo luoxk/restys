@@ -1,11 +1,11 @@
-package req
+package restys
 
 import (
 	"bytes"
 	"log"
 	"testing"
 
-	"github.com/imroc/req/v3/internal/tests"
+	"restys/internal/tests"
 )
 
 func TestLogger(t *testing.T) {

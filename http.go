@@ -1,4 +1,4 @@
-package req
+package restys
 
 import (
 	"encoding/base64"
@@ -8,9 +8,9 @@ import (
 	"net/textproto"
 	"strings"
 
-	"github.com/imroc/req/v3/internal/ascii"
 	"golang.org/x/net/http/httpguts"
 	"golang.org/x/net/idna"
+	"restys/internal/ascii"
 )
 
 // maxInt64 is the effective "infinite" value for the Server and

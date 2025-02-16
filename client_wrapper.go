@@ -1,4 +1,4 @@
-package req
+package restys
 
 import (
 	"context"
@@ -9,8 +9,8 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/imroc/req/v3/http2"
 	utls "github.com/refraction-networking/utls"
+	"restys/http2"
 )
 
 // WrapRoundTrip is a global wrapper methods which delegated

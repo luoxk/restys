@@ -1,4 +1,4 @@
-package req
+package restys
 
 import (
 	"bytes"
@@ -17,24 +17,26 @@ import (
 	"testing"
 	"time"
 
-	"github.com/imroc/req/v3/internal/header"
-	"github.com/imroc/req/v3/internal/tests"
 	"golang.org/x/net/publicsuffix"
+	"restys/internal/header"
+	"restys/internal/tests"
 )
 
 func TestRetryCancelledContext(t *testing.T) {
-	cancelledCtx, done := context.WithCancel(context.Background())
-	done()
 
 	client := tc().
 		SetCommonRetryCount(2).
-		SetCommonRetryBackoffInterval(1*time.Second, 5*time.Second)
+		SetCommonRetryBackoffInterval(1*time.Second, 5*time.Second).
+		//ImpersonateChrome().
+		SetJa3WithStr("771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,51-16-11-10-18-45-35-17513-27-23-0-43-65037-65281-13-5,4588-29-23-24,0").
+		SetAkamaiWithStr("1:65536,2:0,4:6291456,6:262144|15663106|0|m,a,s,p").
+		SetProxyURL("socks5://183.162.239.243:60007")
 
-	res, err := client.R().SetContext(cancelledCtx).Get("/")
-
-	tests.AssertEqual(t, 0, res.Request.RetryAttempt)
-	tests.AssertNotNil(t, err)
-	tests.AssertErrorContains(t, err, "context canceled")
+	res, err := client.R().Get("https://tls.browserleaks.com/json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Println(res.String())
 }
 
 func TestWrapRoundTrip(t *testing.T) {

@@ -5,8 +5,8 @@
 package http2
 
 import (
-	"github.com/imroc/req/v3/internal/ascii"
 	"net/http"
+	"restys/internal/ascii"
 	"sync"
 )
 

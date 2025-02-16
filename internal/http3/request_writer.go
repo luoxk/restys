@@ -12,9 +12,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/imroc/req/v3/internal/dump"
-	reqheader "github.com/imroc/req/v3/internal/header"
 	"github.com/quic-go/qpack"
+	"restys/internal/dump"
+	reqheader "restys/internal/header"
 
 	"github.com/quic-go/quic-go"
 	"golang.org/x/net/http/httpguts"

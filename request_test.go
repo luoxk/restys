@@ -1,4 +1,4 @@
-package req
+package restys
 
 import (
 	"bytes"
@@ -14,8 +14,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/imroc/req/v3/internal/header"
-	"github.com/imroc/req/v3/internal/tests"
+	"restys/internal/header"
+	"restys/internal/tests"
 )
 
 func TestMustSendMethods(t *testing.T) {

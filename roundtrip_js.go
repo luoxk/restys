@@ -4,7 +4,7 @@
 
 //go:build js && wasm
 
-package req
+package restys
 
 import (
 	"errors"
@@ -15,7 +15,7 @@ import (
 	"strings"
 	"syscall/js"
 
-	"github.com/imroc/req/v3/internal/ascii"
+	"restys/internal/ascii"
 )
 
 var uint8Array = js.Global().Get("Uint8Array")

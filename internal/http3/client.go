@@ -13,9 +13,9 @@ import (
 	"github.com/quic-go/qpack"
 	"github.com/quic-go/quic-go"
 
-	"github.com/imroc/req/v3/internal/dump"
-	"github.com/imroc/req/v3/internal/quic-go/quicvarint"
-	"github.com/imroc/req/v3/internal/transport"
+	"restys/internal/dump"
+	"restys/internal/quic-go/quicvarint"
+	"restys/internal/transport"
 )
 
 const (

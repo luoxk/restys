@@ -1,4 +1,4 @@
-package req
+package restys
 
 import (
 	"errors"
@@ -7,8 +7,8 @@ import (
 
 	"golang.org/x/net/http/httpguts"
 
-	"github.com/imroc/req/v3/internal/ascii"
-	"github.com/imroc/req/v3/internal/header"
+	"restys/internal/ascii"
+	"restys/internal/header"
 )
 
 // Given a string of the form "host", "host:port", or "[ipv6::address]:port",

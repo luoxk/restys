@@ -1,9 +1,9 @@
-package req
+package restys
 
 import (
-	"github.com/imroc/req/v3/internal/dump"
 	"io"
 	"os"
+	"restys/internal/dump"
 )
 
 // DumpOptions controls the dump behavior.

@@ -1,11 +1,9 @@
-package req
+package restys
 
 import (
 	"encoding/json"
 	"encoding/xml"
 	"fmt"
-	"github.com/imroc/req/v3/internal/header"
-	"github.com/imroc/req/v3/internal/tests"
 	"go/token"
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"golang.org/x/text/transform"
@@ -16,6 +14,8 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"restys/internal/header"
+	"restys/internal/tests"
 	"strconv"
 	"strings"
 	"sync"

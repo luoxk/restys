@@ -1,4 +1,4 @@
-module github.com/imroc/req/v3
+module restys
 
 go 1.22.0
 

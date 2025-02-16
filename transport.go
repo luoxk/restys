@@ -7,7 +7,7 @@
 // This is the low-level Transport implementation of http.RoundTripper.
 // The high-level interface is in client.go.
 
-package req
+package restys
 
 import (
 	"bufio"
@@ -32,23 +32,23 @@ import (
 	"time"
 	_ "unsafe"
 
-	"github.com/imroc/req/v3/http2"
-	"github.com/imroc/req/v3/internal/altsvcutil"
-	"github.com/imroc/req/v3/internal/ascii"
-	"github.com/imroc/req/v3/internal/common"
-	"github.com/imroc/req/v3/internal/compress"
-	"github.com/imroc/req/v3/internal/dump"
-	"github.com/imroc/req/v3/internal/header"
-	h2internal "github.com/imroc/req/v3/internal/http2"
-	"github.com/imroc/req/v3/internal/http3"
-	"github.com/imroc/req/v3/internal/netutil"
-	"github.com/imroc/req/v3/internal/socks"
-	"github.com/imroc/req/v3/internal/transport"
-	"github.com/imroc/req/v3/internal/util"
-	"github.com/imroc/req/v3/pkg/altsvc"
-	reqtls "github.com/imroc/req/v3/pkg/tls"
 	htmlcharset "golang.org/x/net/html/charset"
 	"golang.org/x/text/encoding/ianaindex"
+	"restys/http2"
+	"restys/internal/altsvcutil"
+	"restys/internal/ascii"
+	"restys/internal/common"
+	"restys/internal/compress"
+	"restys/internal/dump"
+	"restys/internal/header"
+	h2internal "restys/internal/http2"
+	"restys/internal/http3"
+	"restys/internal/netutil"
+	"restys/internal/socks"
+	"restys/internal/transport"
+	"restys/internal/util"
+	"restys/pkg/altsvc"
+	reqtls "restys/pkg/tls"
 
 	"golang.org/x/net/http/httpguts"
 )

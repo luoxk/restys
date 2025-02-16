@@ -1,4 +1,4 @@
-package req
+package restys
 
 import (
 	"bytes"
@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/imroc/req/v3/internal/tests"
+	"restys/internal/tests"
 )
 
 func TestRetryBackOff(t *testing.T) {

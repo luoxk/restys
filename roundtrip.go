@@ -4,7 +4,7 @@
 
 //go:build !js
 
-package req
+package restys
 
 import (
 	"net/http"

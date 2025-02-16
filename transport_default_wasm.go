@@ -4,7 +4,7 @@
 
 //go:build (js && wasm) || wasip1
 
-package req
+package restys
 
 import (
 	"context"

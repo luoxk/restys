@@ -1,4 +1,4 @@
-package req
+package restys
 
 import (
 	"bytes"
@@ -16,9 +16,9 @@ import (
 
 	"github.com/hashicorp/go-multierror"
 
-	"github.com/imroc/req/v3/internal/dump"
-	"github.com/imroc/req/v3/internal/header"
-	"github.com/imroc/req/v3/internal/util"
+	"restys/internal/dump"
+	"restys/internal/header"
+	"restys/internal/util"
 )
 
 // Request struct is used to compose and fire individual request from

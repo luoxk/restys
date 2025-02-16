@@ -1,4 +1,4 @@
-package req
+package restys
 
 import (
 	"crypto/rand"
@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/imroc/req/v3/http2"
 	utls "github.com/refraction-networking/utls"
+	"restys/http2"
 )
 
 // Identical for both Blink-based browsers (Chrome, Chromium, etc.) and WebKit-based browsers (Safari, etc.)

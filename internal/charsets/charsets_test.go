@@ -5,8 +5,8 @@
 package charsets
 
 import (
-	"github.com/imroc/req/v3/internal/tests"
 	"os"
+	"restys/internal/tests"
 	"runtime"
 	"testing"
 )

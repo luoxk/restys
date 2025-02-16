@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package req
+package restys
 
 import (
 	"bufio"
@@ -13,7 +13,7 @@ import (
 	"net/textproto"
 	"sync"
 
-	"github.com/imroc/req/v3/internal/dump"
+	"restys/internal/dump"
 )
 
 func isASCIILetter(b byte) bool {

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package req
+package restys
 
 import (
 	"bufio"
@@ -19,10 +19,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/imroc/req/v3/internal"
-	"github.com/imroc/req/v3/internal/ascii"
-	"github.com/imroc/req/v3/internal/dump"
-	"github.com/imroc/req/v3/internal/godebug"
+	"restys/internal"
+	"restys/internal/ascii"
+	"restys/internal/dump"
+	"restys/internal/godebug"
 
 	"golang.org/x/net/http/httpguts"
 )

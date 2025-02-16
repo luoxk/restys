@@ -1,4 +1,4 @@
-package req
+package restys
 
 import (
 	"crypto/md5"
@@ -12,7 +12,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/imroc/req/v3/internal/header"
+	"restys/internal/header"
 )
 
 var (

@@ -3,7 +3,7 @@ package socks
 import (
 	"bytes"
 	"context"
-	"github.com/imroc/req/v3/internal/tests"
+	"restys/internal/tests"
 	"strings"
 	"testing"
 )

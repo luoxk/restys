@@ -5,8 +5,8 @@
     <p align="center"><strong>Simple Go HTTP client with Black Magic</strong></p>
     <p align="center">
         <a href="https://github.com/imroc/req/actions/workflows/ci.yml?query=branch%3Amaster"><img src="https://github.com/imroc/req/actions/workflows/ci.yml/badge.svg" alt="Build Status"></a>
-        <a href="https://goreportcard.com/report/github.com/imroc/req/v3"><img src="https://goreportcard.com/badge/github.com/imroc/req/v3" alt="Go Report Card"></a>
-        <a href="https://pkg.go.dev/github.com/imroc/req/v3"><img src="https://pkg.go.dev/badge/github.com/imroc/req/v3.svg"></a>
+        <a href="https://goreportcard.com/report/resty"><img src="https://goreportcard.com/badge/resty" alt="Go Report Card"></a>
+        <a href="https://pkg.go.dev/resty"><img src="https://pkg.go.dev/badge/resty.svg"></a>
         <a href="LICENSE"><img src="https://img.shields.io/github/license/imroc/req.svg" alt="License"></a>
         <a href="https://github.com/imroc/req/releases"><img src="https://img.shields.io/github/v/release/imroc/req?display_name=tag&sort=semver" alt="GitHub Releases"></a>
         <a href="https://github.com/avelino/awesome-go"><img src="https://awesome.re/mentioned-badge.svg" alt="Mentioned in Awesome Go"></a>
@@ -38,7 +38,7 @@ Full documentation is available on the official website: https://req.cool.
 You first need [Go](https://go.dev/) installed (version 1.22+ is required), then you can use the below Go command to install req:
 
 ``` sh
-go get github.com/imroc/req/v3
+go get resty
 ```
 
 **Import**
@@ -46,7 +46,7 @@ go get github.com/imroc/req/v3
 Import req to your code:
 
 ```go
-import "github.com/imroc/req/v3"
+import "restys"
 ```
 
 **Basic Usage**
@@ -60,7 +60,7 @@ $ cat main.go
 package main
 
 import (
-    "github.com/imroc/req/v3"
+    "restys"
 )
 
 func main() {
@@ -79,7 +79,7 @@ $ go run main.go
 :method: GET
 :path: /uuid
 :scheme: https
-user-agent: req/v3 (https://github.com/imroc/req/v3)
+user-agent: req/v3 (https://resty)
 accept-encoding: gzip
 
 :status: 200
@@ -97,7 +97,7 @@ access-control-allow-credentials: true
 2022/05/19 10:05:09.340974 DEBUG [req] HTTP/1.1 GET https://httpbin.org/uuid
 GET /uuid HTTP/1.1
 Host: httpbin.org
-User-Agent: req/v3 (https://github.com/imroc/req/v3)
+User-Agent: req/v3 (https://resty)
 Accept-Encoding: gzip
 
 HTTP/1.1 200 OK
@@ -136,7 +136,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/imroc/req/v3"
+	"restys"
 	"log"
 )
 
@@ -164,7 +164,7 @@ package main
 
 import (
   "fmt"
-  "github.com/imroc/req/v3"
+  "restys"
   "log"
   "time"
 )
@@ -232,7 +232,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/imroc/req/v3"
+	"restys"
 	"log"
 	"time"
 )
@@ -296,7 +296,7 @@ package main
 
 import (
   "fmt"
-  "github.com/imroc/req/v3"
+  "restys"
   "log"
 )
 
@@ -337,7 +337,7 @@ func main() {
 :method: POST
 :path: /post
 :scheme: https
-user-agent: req/v3 (https://github.com/imroc/req/v3)
+user-agent: req/v3 (https://resty)
 content-type: application/json; charset=utf-8
 content-length: 55
 accept-encoding: gzip
@@ -362,7 +362,7 @@ access-control-allow-credentials: true
     "Content-Length": "55",
     "Content-Type": "application/json; charset=utf-8",
     "Host": "httpbin.org",
-    "User-Agent": "req/v3 (https://github.com/imroc/req/v3)",
+    "User-Agent": "req/v3 (https://resty)",
     "X-Amzn-Trace-Id": "Root=1-628633d4-7559d633152b4307288ead2e"
   },
   "json": {
@@ -387,7 +387,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/imroc/req/v3"
+	"restys"
 )
 
 type APIResponse struct {
@@ -425,7 +425,7 @@ Here is an example of building GitHub's SDK with req, using two styles (`GetUser
 import (
 	"context"
 	"fmt"
-	"github.com/imroc/req/v3"
+	"restys"
 )
 
 type ErrorMessage struct {
