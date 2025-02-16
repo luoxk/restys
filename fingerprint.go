@@ -1,6 +1,7 @@
 package restys
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 )
@@ -57,4 +58,9 @@ func (ch *Fingerprint) GenerateSecCHUAMobile() string {
 // GenerateSecCHUAPlatform 生成 sec-ch-ua-platform 字段
 func (ch *Fingerprint) GenerateSecCHUAPlatform() string {
 	return fmt.Sprintf(`"%s"`, ch.ClientHint.Platform)
+}
+
+func ParseFingerprint(str string) (fp *Fingerprint) {
+	json.Unmarshal([]byte(str), &fp)
+	return
 }
