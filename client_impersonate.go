@@ -4,8 +4,10 @@ import (
 	"crypto/rand"
 	"encoding/binary"
 	"math/big"
+	rand2 "math/rand"
 	"strconv"
 	"strings"
+	"time"
 
 	utls "github.com/refraction-networking/utls"
 	"restys/http2"
@@ -137,6 +139,52 @@ func (c *Client) ImpersonateChrome() *Client {
 		SetHTTP2HeaderPriority(chromeHeaderPriority).
 		SetMultipartBoundaryFunc(webkitMultipartBoundaryFunc)
 	return c
+}
+
+func (c *Client) ImpersonateEdge() *Client {
+	fingerprint := GenerateRandomFingerprint(0)
+	chromeHeaders := map[string]string{
+		"pragma":                    "no-cache",
+		"cache-control":             "no-cache",
+		"sec-ch-ua":                 fingerprint.GenerateSecCHUA(),
+		"sec-ch-ua-mobile":          fingerprint.GenerateSecCHUAMobile(),
+		"sec-ch-ua-platform":        fingerprint.GenerateSecCHUAPlatform(),
+		"upgrade-insecure-requests": "1",
+		"user-agent":                fingerprint.UserAgent,
+		"accept":                    "*/*",
+		"sec-fetch-site":            "none",
+		"sec-fetch-mode":            "cors",
+		"sec-fetch-user":            "?1",
+		"sec-fetch-dest":            "empty",
+		"accept-language":           "zh-CN,zh;q=0.9",
+	}
+	c.
+		SetTLSFingerprint(utls.HelloChrome_Auto).
+		//SetJa3WithStr("771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,17513-43-23-45-18-27-10-16-11-51-35-0-13-65281-5-65037,29-23-24,0").
+		//771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,17513-43-23-45-18-27-10-16-11-51-35-0-13-65281-5-65037,29-23-24,0
+		//771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,27-18-13-23-43-51-45-17613-65037-35-5-0-65281-10-16-11,4588-29-23-24,0
+		//SetJa3WithStr(generateRandomJA3("771,4865-4866-4867-49195-49199-49196-49200-52393-52392-49171-49172-156-157-47-53,27-18-13-23-43-51-45-17613-65037-35-5-0-65281-10-16-11,4588-29-23-24,0")).
+		SetAkamaiWithStr("1:65536,2:0,4:6291456,6:262144|15663105|0|m,a,s,p").
+		SetCommonPseudoHeaderOder(chromePseudoHeaderOrder...).
+		SetCommonHeaderOrder(chromeHeaderOrder...).
+		SetCommonHeaders(chromeHeaders).
+		SetHTTP2HeaderPriority(chromeHeaderPriority).
+		SetMultipartBoundaryFunc(webkitMultipartBoundaryFunc)
+	return c
+}
+
+func generateRandomJA3(baseJA3 string) string {
+	parts := strings.Split(baseJA3, ",")
+	if len(parts) != 5 {
+		return ""
+	}
+	extensions := strings.Split(parts[2], "-")
+	rand2.Seed(time.Now().UnixNano())
+	rand2.Shuffle(len(extensions), func(i, j int) {
+		extensions[i], extensions[j] = extensions[j], extensions[i]
+	})
+	parts[2] = strings.Join(extensions, "-")
+	return strings.Join(parts, ",")
 }
 
 var (

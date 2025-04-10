@@ -26,6 +26,19 @@ type ClientConnPool interface {
 	AddConnIfNeeded(key string, t *Transport, c net.Conn) (used bool, err error)
 }
 
+type ClientConnPool2 interface {
+	// GetClientConn returns a specific HTTP/2 connection (usually
+	// a TLS-TCP connection) to an HTTP/2 server. On success, the
+	// returned ClientConn accounts for the upcoming RoundTrip
+	// call, so the caller should not omit it. If the caller needs
+	// to, ClientConn.RoundTrip can be called with a bogus
+	// new(http.Request) to release the stream reservation.
+	GetClientConn(req *http.Request, addr string, dialOnMiss bool) (*http2ClientConn, error)
+	MarkDead(conn *http2ClientConn)
+	CloseIdleConnections()
+	AddConnIfNeeded(key string, t *Http2Transport, c net.Conn) (used bool, err error)
+}
+
 // TODO: use singleflight for dialing and addConnCalls?
 type clientConnPool struct {
 	t *Transport
@@ -88,16 +101,6 @@ func (p *clientConnPool) GetClientConn(req *http.Request, addr string, dialOnMis
 }
 
 // dialCall is an in-flight Transport dial call to a host.
-type dialCall struct {
-	_ incomparable
-	p *clientConnPool
-	// the context associated with the request
-	// that created this dialCall
-	ctx  context.Context
-	done chan struct{} // closed when done
-	res  *ClientConn   // valid after done is closed
-	err  error         // valid after done is closed
-}
 
 // requires p.mu is held.
 func (p *clientConnPool) getStartDialLocked(ctx context.Context, addr string) *dialCall {
@@ -112,6 +115,17 @@ func (p *clientConnPool) getStartDialLocked(ctx context.Context, addr string) *d
 	p.dialing[addr] = call
 	go call.dial(call.ctx, addr)
 	return call
+}
+
+type dialCall struct {
+	_ incomparable
+	p *clientConnPool
+	// the context associated with the request
+	// that created this dialCall
+	ctx  context.Context
+	done chan struct{} // closed when done
+	res  *ClientConn   // valid after done is closed
+	err  error         // valid after done is closed
 }
 
 // run in its own goroutine.

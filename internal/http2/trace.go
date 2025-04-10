@@ -52,6 +52,22 @@ func traceGotConn(req *http.Request, cc *ClientConn, reused bool) {
 
 	trace.GotConn(ci)
 }
+func traceGotConn2(req *http.Request, cc *http2ClientConn, reused bool) {
+	trace := httptrace.ContextClientTrace(req.Context())
+	if trace == nil || trace.GotConn == nil {
+		return
+	}
+	ci := httptrace.GotConnInfo{Conn: cc.tconn}
+	ci.Reused = reused
+	cc.mu.Lock()
+	ci.WasIdle = len(cc.streams) == 0 && reused
+	if ci.WasIdle && !cc.lastActive.IsZero() {
+		ci.IdleTime = time.Now().Sub(cc.lastActive)
+	}
+	cc.mu.Unlock()
+
+	trace.GotConn(ci)
+}
 
 func traceWroteHeaders(trace *httptrace.ClientTrace) {
 	if trace != nil && trace.WroteHeaders != nil {

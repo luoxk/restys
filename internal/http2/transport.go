@@ -598,14 +598,6 @@ func (t *Transport) newTLSConfig(host string) *tls.Config {
 	return cfg
 }
 
-var zeroDialer net.Dialer
-
-type tlsHandshakeTimeoutError struct{}
-
-func (tlsHandshakeTimeoutError) Timeout() bool   { return true }
-func (tlsHandshakeTimeoutError) Temporary() bool { return true }
-func (tlsHandshakeTimeoutError) Error() string   { return "net/http: TLS handshake timeout" }
-
 // dialTLSWithContext uses tls.Dialer, added in Go 1.15, to open a TLS
 // connection.
 func (t *Transport) dialTLSWithContext(ctx context.Context, network, addr string, cfg *tls.Config) (reqtls.Conn, error) {

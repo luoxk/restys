@@ -132,7 +132,9 @@ type Transport struct {
 	transport.Options
 
 	t2 *h2internal.Transport // non-nil if http2 wired up
+	//t2 *h2internal.Transport
 	t3 *http3.RoundTripper
+	//tt2 *http2.Http2Transport
 
 	// disableAutoDecode, if true, prevents auto detect response
 	// body's charset and decode it to utf-8
@@ -163,6 +165,7 @@ func T() *Transport {
 			TLSClientConfig:       &tls.Config{NextProtos: []string{"http/1.1", "h2"}},
 		},
 	}
+	//t.t2 = &h2internal.Transport{Options: &t.Options}
 	t.t2 = &h2internal.Transport{Options: &t.Options}
 	return t
 }
@@ -771,6 +774,19 @@ func (t *Transport) Clone() *Transport {
 		}
 	}
 	if t.t2 != nil {
+		/*tt.t2 = &http2.Http2Transport{
+			Options:                    &tt.Options,
+			MaxHeaderListSize:          t.t2.MaxHeaderListSize,
+			StrictMaxConcurrentStreams: t.t2.StrictMaxConcurrentStreams,
+			ReadIdleTimeout:            t.t2.ReadIdleTimeout,
+			PingTimeout:                t.t2.PingTimeout,
+			WriteByteTimeout:           t.t2.WriteByteTimeout,
+			ConnectionFlow:             t.t2.ConnectionFlow,
+			Settings:                   cloneSlice(t.t2.Settings),
+			HeaderPriority:             t.t2.HeaderPriority,
+			PriorityFrames:             cloneSlice(t.t2.PriorityFrames),
+		}*/
+
 		tt.t2 = &h2internal.Transport{
 			Options:                    &tt.Options,
 			MaxHeaderListSize:          t.t2.MaxHeaderListSize,
@@ -2192,6 +2208,9 @@ func (t *Transport) dialConn(ctx context.Context, cm connectMethod) (pconn *pers
 		if pa := cm.proxyAuth(); pa != "" {
 			hdr = hdr.Clone()
 			hdr.Set("Proxy-Authorization", pa)
+		}
+		if len(t.Headers.Get("User-Agent")) > 0 {
+			hdr.Set("User-Agent", t.Headers.Get("User-Agent"))
 		}
 		connectReq := &http.Request{
 			Method: "CONNECT",

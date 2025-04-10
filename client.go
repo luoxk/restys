@@ -995,9 +995,10 @@ func (c *Client) SetAkamaiWithStr(str string) *Client {
 	if err != nil {
 		return c
 	}
+
 	c.Transport.SetHTTP2SettingsFrame(h2spec.InitialSetting...)
 	c.Transport.SetHTTP2ConnectionFlow(h2spec.ConnFlow)
-	c.SetCommonPseudoHeaderOder(chromePseudoHeaderOrder...)
+	c.SetCommonPseudoHeaderOder(h2spec.OrderHeaders...)
 	return c
 }
 
@@ -2018,19 +2019,20 @@ func (c *Client) SetTLSFingerprintRaw(spec utls.ClientHelloSpec) *Client {
 		hostname := addr[:colonPos]
 		tlsConfig := c.GetTLSClientConfig()
 		utlsConfig := &utls.Config{
-			ServerName:                  hostname,
-			Rand:                        tlsConfig.Rand,
-			Time:                        tlsConfig.Time,
-			RootCAs:                     tlsConfig.RootCAs,
-			NextProtos:                  tlsConfig.NextProtos,
-			ClientCAs:                   tlsConfig.ClientCAs,
-			InsecureSkipVerify:          tlsConfig.InsecureSkipVerify,
-			CipherSuites:                tlsConfig.CipherSuites,
-			SessionTicketsDisabled:      tlsConfig.SessionTicketsDisabled,
-			MinVersion:                  tlsConfig.MinVersion,
-			MaxVersion:                  tlsConfig.MaxVersion,
-			DynamicRecordSizingDisabled: tlsConfig.DynamicRecordSizingDisabled,
-			KeyLogWriter:                tlsConfig.KeyLogWriter,
+			ServerName:                         hostname,
+			Rand:                               tlsConfig.Rand,
+			Time:                               tlsConfig.Time,
+			RootCAs:                            tlsConfig.RootCAs,
+			NextProtos:                         tlsConfig.NextProtos,
+			ClientCAs:                          tlsConfig.ClientCAs,
+			InsecureSkipVerify:                 tlsConfig.InsecureSkipVerify,
+			CipherSuites:                       tlsConfig.CipherSuites,
+			SessionTicketsDisabled:             tlsConfig.SessionTicketsDisabled,
+			MinVersion:                         tlsConfig.MinVersion,
+			MaxVersion:                         tlsConfig.MaxVersion,
+			DynamicRecordSizingDisabled:        tlsConfig.DynamicRecordSizingDisabled,
+			KeyLogWriter:                       tlsConfig.KeyLogWriter,
+			PreferSkipResumptionOnNilExtension: true,
 		}
 
 		uconn := &uTLSConn{utls.UClient(plainConn, utlsConfig, utls.HelloCustom)}
@@ -2625,4 +2627,8 @@ func (c *Client) roundTrip(r *Request) (resp *Response, err error) {
 		}
 	}
 	return
+}
+
+func (c *Client) RoundTrip(r *Request) (resp *Response, err error) {
+	return c.roundTrip(r)
 }
