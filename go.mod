@@ -1,4 +1,4 @@
-module restys
+module github.com/luoxk/restys
 
 go 1.23.0
 
