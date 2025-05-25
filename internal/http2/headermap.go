@@ -5,8 +5,8 @@
 package http2
 
 import (
+	"github.com/luoxk/restys/internal/ascii"
 	"net/http"
-	"restys/internal/ascii"
 	"sync"
 )
 

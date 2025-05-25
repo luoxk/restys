@@ -16,10 +16,10 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/luoxk/restys/http2"
+	"github.com/luoxk/restys/internal/dump"
 	"golang.org/x/net/http/httpguts"
 	"golang.org/x/net/http2/hpack"
-	"restys/http2"
-	"restys/internal/dump"
 )
 
 const frameHeaderLen = 9

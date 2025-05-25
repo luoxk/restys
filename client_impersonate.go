@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/luoxk/restys/http2"
 	utls "github.com/refraction-networking/utls"
-	"restys/http2"
 )
 
 // Identical for both Blink-based browsers (Chrome, Chromium, etc.) and WebKit-based browsers (Safari, etc.)

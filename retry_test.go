@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"restys/internal/tests"
+	"github.com/luoxk/restys/internal/tests"
 )
 
 func TestRetryBackOff(t *testing.T) {

@@ -17,9 +17,9 @@ import (
 	"testing"
 	"time"
 
+	"github.com/luoxk/restys/internal/header"
+	"github.com/luoxk/restys/internal/tests"
 	"golang.org/x/net/publicsuffix"
-	"restys/internal/header"
-	"restys/internal/tests"
 )
 
 func TestRetryCancelledContext(t *testing.T) {

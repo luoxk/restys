@@ -13,7 +13,7 @@ import (
 	"net/textproto"
 	"sync"
 
-	"restys/internal/dump"
+	"github.com/luoxk/restys/internal/dump"
 )
 
 func isASCIILetter(b byte) bool {

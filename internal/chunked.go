@@ -13,8 +13,8 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"github.com/luoxk/restys/internal/util"
 	"io"
-	"restys/internal/util"
 )
 
 const maxLineLength = 4096 // assumed <= bufio.defaultBufSize

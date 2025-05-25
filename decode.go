@@ -1,8 +1,8 @@
 package restys
 
 import (
+	"github.com/luoxk/restys/internal/charsets"
 	"io"
-	"restys/internal/charsets"
 	"strings"
 )
 

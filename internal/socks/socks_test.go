@@ -3,7 +3,7 @@ package socks
 import (
 	"bytes"
 	"context"
-	"restys/internal/tests"
+	"github.com/luoxk/restys/internal/tests"
 	"strings"
 	"testing"
 )

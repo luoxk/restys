@@ -35,15 +35,15 @@ import (
 	"golang.org/x/net/http2/hpack"
 	"golang.org/x/net/idna"
 
-	"restys/http2"
-	"restys/internal/ascii"
-	"restys/internal/common"
-	"restys/internal/compress"
-	"restys/internal/dump"
-	"restys/internal/header"
-	"restys/internal/netutil"
-	"restys/internal/transport"
-	reqtls "restys/pkg/tls"
+	"github.com/luoxk/restys/http2"
+	"github.com/luoxk/restys/internal/ascii"
+	"github.com/luoxk/restys/internal/common"
+	"github.com/luoxk/restys/internal/compress"
+	"github.com/luoxk/restys/internal/dump"
+	"github.com/luoxk/restys/internal/header"
+	"github.com/luoxk/restys/internal/netutil"
+	"github.com/luoxk/restys/internal/transport"
+	reqtls "github.com/luoxk/restys/pkg/tls"
 )
 
 const (

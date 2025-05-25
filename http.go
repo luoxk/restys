@@ -8,9 +8,9 @@ import (
 	"net/textproto"
 	"strings"
 
+	"github.com/luoxk/restys/internal/ascii"
 	"golang.org/x/net/http/httpguts"
 	"golang.org/x/net/idna"
-	"restys/internal/ascii"
 )
 
 // maxInt64 is the effective "infinite" value for the Server and

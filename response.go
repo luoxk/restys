@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
-	"restys/internal/header"
-	"restys/internal/util"
+	"github.com/luoxk/restys/internal/header"
+	"github.com/luoxk/restys/internal/util"
 )
 
 // Response is the http response.

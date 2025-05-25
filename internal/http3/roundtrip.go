@@ -12,7 +12,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"restys/internal/transport"
+	"github.com/luoxk/restys/internal/transport"
 
 	"github.com/quic-go/quic-go"
 

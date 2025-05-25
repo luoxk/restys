@@ -16,9 +16,9 @@ import (
 
 	"github.com/hashicorp/go-multierror"
 
-	"restys/internal/dump"
-	"restys/internal/header"
-	"restys/internal/util"
+	"github.com/luoxk/restys/internal/dump"
+	"github.com/luoxk/restys/internal/header"
+	"github.com/luoxk/restys/internal/util"
 )
 
 // Request struct is used to compose and fire individual request from

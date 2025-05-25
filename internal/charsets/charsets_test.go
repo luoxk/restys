@@ -5,8 +5,8 @@
 package charsets
 
 import (
+	"github.com/luoxk/restys/internal/tests"
 	"os"
-	"restys/internal/tests"
 	"runtime"
 	"testing"
 )

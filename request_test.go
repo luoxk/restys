@@ -14,8 +14,8 @@ import (
 	"testing"
 	"time"
 
-	"restys/internal/header"
-	"restys/internal/tests"
+	"github.com/luoxk/restys/internal/header"
+	"github.com/luoxk/restys/internal/tests"
 )
 
 func TestMustSendMethods(t *testing.T) {

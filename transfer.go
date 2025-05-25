@@ -19,10 +19,10 @@ import (
 	"sync"
 	"time"
 
-	"restys/internal"
-	"restys/internal/ascii"
-	"restys/internal/dump"
-	"restys/internal/godebug"
+	"github.com/luoxk/restys/internal"
+	"github.com/luoxk/restys/internal/ascii"
+	"github.com/luoxk/restys/internal/dump"
+	"github.com/luoxk/restys/internal/godebug"
 
 	"golang.org/x/net/http/httpguts"
 )

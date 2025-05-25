@@ -8,7 +8,7 @@ import (
 	"net/url"
 	"time"
 
-	"restys/internal/dump"
+	"github.com/luoxk/restys/internal/dump"
 )
 
 // Options is transport's options.

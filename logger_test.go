@@ -5,7 +5,7 @@ import (
 	"log"
 	"testing"
 
-	"restys/internal/tests"
+	"github.com/luoxk/restys/internal/tests"
 )
 
 func TestLogger(t *testing.T) {

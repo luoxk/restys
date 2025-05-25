@@ -1,7 +1,7 @@
 package altsvcutil
 
 import (
-	"restys/internal/tests"
+	"github.com/luoxk/restys/internal/tests"
 	"testing"
 )
 

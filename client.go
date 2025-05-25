@@ -25,9 +25,9 @@ import (
 	utls "github.com/refraction-networking/utls"
 	"golang.org/x/net/publicsuffix"
 
-	"restys/http2"
-	"restys/internal/header"
-	"restys/internal/util"
+	"github.com/luoxk/restys/http2"
+	"github.com/luoxk/restys/internal/header"
+	"github.com/luoxk/restys/internal/util"
 )
 
 // DefaultClient returns the global default Client.

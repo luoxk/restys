@@ -3,11 +3,11 @@ package altsvcutil
 import (
 	"bytes"
 	"fmt"
+	"github.com/luoxk/restys/internal/netutil"
+	"github.com/luoxk/restys/pkg/altsvc"
 	"io"
 	"net"
 	"net/url"
-	"restys/internal/netutil"
-	"restys/pkg/altsvc"
 	"strconv"
 	"strings"
 	"time"

@@ -1,9 +1,9 @@
 package restys
 
 import (
+	"github.com/luoxk/restys/internal/dump"
 	"io"
 	"os"
-	"restys/internal/dump"
 )
 
 // DumpOptions controls the dump behavior.

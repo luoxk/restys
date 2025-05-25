@@ -7,9 +7,9 @@ import (
 	"io"
 	"net/http"
 
-	"restys/internal/compress"
-	"restys/internal/dump"
-	"restys/internal/transport"
+	"github.com/luoxk/restys/internal/compress"
+	"github.com/luoxk/restys/internal/dump"
+	"github.com/luoxk/restys/internal/transport"
 
 	"github.com/quic-go/quic-go"
 

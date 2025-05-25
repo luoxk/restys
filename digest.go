@@ -12,7 +12,7 @@ import (
 	"net/http"
 	"strings"
 
-	"restys/internal/header"
+	"github.com/luoxk/restys/internal/header"
 )
 
 var (

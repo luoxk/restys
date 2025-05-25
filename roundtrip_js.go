@@ -15,7 +15,7 @@ import (
 	"strings"
 	"syscall/js"
 
-	"restys/internal/ascii"
+	"github.com/luoxk/restys/internal/ascii"
 )
 
 var uint8Array = js.Global().Get("Uint8Array")
